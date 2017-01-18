@@ -28,16 +28,7 @@ public class CheckersPiece : MonoBehaviour
 			Team = team;
 			teamColor = (Team == CheckersTeam.BLUE ? Color.blue : Color.red);
 			pieceRenderer.material.color = teamColor;
+			transform.Find("CheckersPieceGameObject").SendMessage("SetTeam", teamColor);
 		}
-	}
-
-	public void OnMouseEnter()
-	{
-		pieceRenderer.material.color = Color.Lerp(teamColor, Color.green, 0.75f);
-	}
-
-	public void OnMouseExit()
-	{
-		pieceRenderer.material.color = teamColor;
 	}
 }
