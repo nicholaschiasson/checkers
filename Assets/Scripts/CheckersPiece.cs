@@ -10,7 +10,7 @@ public class CheckersPiece : MonoBehaviour
 
 	void Awake()
 	{
-		pieceRenderer = GetComponent<Renderer>();
+		pieceRenderer = transform.Find("CheckersPieceGameObject").GetComponent<Renderer>();
 		teamColor = Color.gray;
 
 		Team = CheckersTeam.NONE;
@@ -27,7 +27,7 @@ public class CheckersPiece : MonoBehaviour
 		{
 			Team = team;
 			teamColor = (Team == CheckersTeam.BLUE ? Color.blue : Color.red);
-			GetComponent<Renderer>().material.color = teamColor;
+			pieceRenderer.material.color = teamColor;
 		}
 	}
 
