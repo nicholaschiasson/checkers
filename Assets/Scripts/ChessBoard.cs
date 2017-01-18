@@ -36,4 +36,9 @@ public class ChessBoard : MonoBehaviour
 			}
 		}
 	}
+
+	public void MovePieceTo(Vector2 position)
+	{
+		
+	}
 }

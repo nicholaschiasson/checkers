@@ -44,9 +44,14 @@ public class CheckersGame : MonoBehaviour
 
 	public static void MovePieceTo(Vector3 position)
 	{
-		MovingPiece = true;
-		//ChessBoard.SendMessage("MovePieceTo", new Vector2(position.x, position.z));
-		CurrentPlayer.SelectedPiece.SendMessage("MoveTo", position);
+		// Using this "newPos" because the position passed in has a lower Y value than the checkers pieces.
+		Vector3 newPos = new Vector3(position.x, CurrentPlayer.SelectedPiece.transform.position.y, position.z);
+		if (newPos != CurrentPlayer.SelectedPiece.transform.position)
+		{
+			MovingPiece = true;
+			//ChessBoard.SendMessage("MovePieceTo", new Vector2(newPos.x, newPos.z));
+			CurrentPlayer.SelectedPiece.SendMessage("MoveTo", newPos);
+		}
 	}
 
 	public static void MoveComplete()
