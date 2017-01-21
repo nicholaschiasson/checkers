@@ -6,6 +6,15 @@ public class ChessBoardTile : MonoBehaviour
 
 	bool mouseDown = false;
 
+	bool AvailableMoveTile
+	{
+		get
+		{
+			Vector2 pos = CheckersGame.ChessBoard.ConvertGamePositionToBoardPosition(new Vector2(transform.position.x, transform.position.z));
+			return CheckersGame.CurrentPlayer.SelectedPiece && CheckersGame.ChessBoard.ChessBoardTileStates[(int)pos.x, (int)pos.y] == ChessBoardTileState.AVAILABLE;
+		}
+	}
+
 	void Awake()
 	{
 		tileRenderer = GetComponent<Renderer>();
@@ -13,8 +22,11 @@ public class ChessBoardTile : MonoBehaviour
 
 	public void OnMouseEnter()
 	{
-		Color col = tileRenderer.material.color;
-		tileRenderer.material.color = new Color(col.r, col.g, col.b, 0.9f);
+		if (AvailableMoveTile)
+		{
+			Color col = tileRenderer.material.color;
+			tileRenderer.material.color = new Color(col.r, col.g, col.b, 1.0f);
+		}
 	}
 
 	public void OnMouseExit()
@@ -39,7 +51,7 @@ public class ChessBoardTile : MonoBehaviour
 
 	public void OnMouseClick()
 	{
-		if (CheckersGame.CurrentPlayer.SelectedPiece)
+		if (AvailableMoveTile)
 		{
 			CheckersGame.MovePieceTo(transform.position);
 		}

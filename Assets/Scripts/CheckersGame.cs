@@ -28,18 +28,21 @@ public class CheckersGame : MonoBehaviour
 
 	public static bool MovingPiece { get; private set; }
 
-	public static GameObject ChessBoard { get; private set; }
+	public static GameObject ChessBoardGameObject { get; private set; }
+
+	public static ChessBoard ChessBoard { get; private set; }
 
 	void Start()
 	{
+		string chessBoardPrefabPath = Utils.Path.Combine("Prefabs", "ChessBoard");
+		ChessBoardGameObject = Instantiate(Resources.Load(chessBoardPrefabPath)) as GameObject;
+		ChessBoard = ChessBoardGameObject.GetComponent<ChessBoard>();
+
 		players = new Queue<Player>();
 		players.Enqueue(new Player(CheckersTeam.RED, DirectionOfMovement.FORWARD));
 		players.Enqueue(new Player(CheckersTeam.BLUE, DirectionOfMovement.BACKWARD));
 
 		MovingPiece = false;
-
-		string chessBoardPrefabPath = Utils.Path.Combine("Prefabs", "ChessBoard");
-		ChessBoard = Instantiate(Resources.Load(chessBoardPrefabPath)) as GameObject;
 	}
 
 	public static void MovePieceTo(Vector3 position)
@@ -49,8 +52,14 @@ public class CheckersGame : MonoBehaviour
 		if (newPos != CurrentPlayer.SelectedPiece.transform.position)
 		{
 			MovingPiece = true;
-			//ChessBoard.SendMessage("MovePieceTo", new Vector2(newPos.x, newPos.z));
-			CurrentPlayer.SelectedPiece.SendMessage("MoveTo", newPos);
+			if (ChessBoard.MovePieceTo(new Vector2(CurrentPlayer.SelectedPiece.position.x, CurrentPlayer.SelectedPiece.position.z), new Vector2(newPos.x, newPos.z)))
+			{
+				CurrentPlayer.SelectedPiece.SendMessage("MoveToAndTake", newPos);
+			}
+			    else
+			{
+				CurrentPlayer.SelectedPiece.SendMessage("MoveTo", newPos);
+			}
 		}
 	}
 

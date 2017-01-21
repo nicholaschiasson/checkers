@@ -14,6 +14,14 @@ public class Player
 				selectedPiece.SendMessage("Deselect");
 			}
 			selectedPiece = value;
+			if (value)
+			{
+				CheckersGame.ChessBoard.SelectPiece(new Vector2(value.position.x, value.position.z));
+			}
+			else
+			{
+				CheckersGame.ChessBoard.SelectPiece(new Vector2(float.NaN, float.NaN));
+			}
 		}
 	}
 	public CheckersTeam Team { get; private set; }

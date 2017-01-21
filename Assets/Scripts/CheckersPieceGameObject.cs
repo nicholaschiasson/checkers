@@ -4,6 +4,7 @@ public class CheckersPieceGameObject : MonoBehaviour
 {
 	Renderer pieceRenderer;
 	Color teamColor;
+	Color highlightColor;
 
 	bool mouseDown = false;
 
@@ -29,6 +30,7 @@ public class CheckersPieceGameObject : MonoBehaviour
 	{
 		pieceRenderer = GetComponent<Renderer>();
 		teamColor = Color.gray;
+		highlightColor = Color.white;
 
 		Team = CheckersTeam.NONE;
 	}
@@ -52,7 +54,7 @@ public class CheckersPieceGameObject : MonoBehaviour
 	{
 		if (Selectable && !Selected)
 		{
-			pieceRenderer.material.color = Color.Lerp(teamColor, Color.green, 0.6f);
+			pieceRenderer.material.color = Color.Lerp(teamColor, highlightColor, 0.5f);
 		}
 	}
 
@@ -60,7 +62,7 @@ public class CheckersPieceGameObject : MonoBehaviour
 	{
 		if (Selectable && !Selected)
 		{
-			pieceRenderer.material.color = Color.Lerp(teamColor, Color.green, 0.6f);
+			pieceRenderer.material.color = Color.Lerp(teamColor, highlightColor, 0.5f);
 		}
 	}
 
@@ -94,7 +96,7 @@ public class CheckersPieceGameObject : MonoBehaviour
 			if (!Selected)
 			{
 				CheckersGame.CurrentPlayer.SelectedPiece = transform.parent;
-				pieceRenderer.material.color = Color.Lerp(teamColor, Color.yellow, 0.6f);
+				pieceRenderer.material.color = Color.Lerp(teamColor, highlightColor, 0.5f);
 			}
 			else
 			{

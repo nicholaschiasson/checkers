@@ -7,6 +7,18 @@ public class CheckersPiece : MonoBehaviour
 	CheckersPieceGameObject checkersPieceGameObject;
 	Vector3 destination;
 
+	public CheckersTeam Team
+	{
+		get
+		{
+			return checkersPieceGameObject.Team;
+		}
+		set
+		{
+			checkersPieceGameObject.SetTeam(value);
+		}
+	}
+
 	void Awake()
 	{
 		animator = GetComponent<Animator>();
@@ -19,7 +31,7 @@ public class CheckersPiece : MonoBehaviour
 		if (transform.position != destination)
 		{
 			AnimatorStateInfo animatorState = animator.GetCurrentAnimatorStateInfo(0);
-			float remainingAnimationTime = animatorState.length - animatorState.normalizedTime;
+			float remainingAnimationTime = animatorState.length - (animatorState.length * animatorState.normalizedTime);
 			float speed = Vector3.Distance(transform.position, destination) / (remainingAnimationTime / Time.deltaTime);
 			if (Vector3.Distance(transform.position, destination) > speed)
 			{
@@ -35,7 +47,7 @@ public class CheckersPiece : MonoBehaviour
 
 	public void SetTeam(CheckersTeam team)
 	{
-		checkersPieceGameObject.SetTeam(team);
+		Team = team;
 	}
 
 	public void Deselect()
@@ -45,8 +57,19 @@ public class CheckersPiece : MonoBehaviour
 
 	public void MoveTo(Vector3 position)
 	{
+		SetNewDestination(position);
+		animator.Play("CheckersPieceStepAnimation");
+	}
+
+	public void MoveToAndTake(Vector3 position)
+	{
+		SetNewDestination(position);
+		animator.Play("CheckersPieceTakeAnimation");
+	}
+
+	void SetNewDestination(Vector3 position)
+	{
 		destination = position;
 		CheckersGame.CurrentPlayer.SelectedPiece = null;
-		animator.Play("CheckersPieceStepAnimation");
 	}
 }
