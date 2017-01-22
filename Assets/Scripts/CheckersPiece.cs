@@ -50,6 +50,11 @@ public class CheckersPiece : MonoBehaviour
 		Team = team;
 	}
 
+	public void Select()
+	{
+		checkersPieceGameObject.Select();
+	}
+
 	public void Deselect()
 	{
 		checkersPieceGameObject.Deselect();
@@ -70,6 +75,9 @@ public class CheckersPiece : MonoBehaviour
 	void SetNewDestination(Vector3 position)
 	{
 		destination = position;
-		CheckersGame.CurrentPlayer.SelectedPiece = null;
+		if (!CheckersGame.CheckersPieceToDie)
+		{
+			CheckersGame.CurrentPlayer.SelectedPiece = null;
+		}
 	}
 }

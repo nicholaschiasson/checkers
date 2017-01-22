@@ -14,7 +14,7 @@ public class CheckersPieceGameObject : MonoBehaviour
 	{
 		get
 		{
-			return !CheckersGame.MovingPiece && CheckersGame.CurrentPlayer.Team == Team;
+			return !CheckersGame.CheckersPieceToDie && !CheckersGame.MovingPiece && CheckersGame.CurrentPlayer.Team == Team;
 		}
 	}
 
@@ -37,12 +37,26 @@ public class CheckersPieceGameObject : MonoBehaviour
 
 	public void SetTeam(CheckersTeam team)
 	{
-		if (team != CheckersTeam.NONE)
+		switch (team)
 		{
-			Team = team;
-			teamColor = (Team == CheckersTeam.BLUE ? Color.blue : Color.red);
-			pieceRenderer.material.color = teamColor;
+			case CheckersTeam.BLUE:
+				teamColor = Color.blue;
+				break;
+			case CheckersTeam.RED:
+				teamColor = Color.red;
+				break;
+			default:
+				teamColor = Color.gray;
+				break;
 		}
+		Team = team;
+		pieceRenderer.material.color = teamColor;
+	}
+
+	public void Select()
+	{
+		pieceRenderer.material.color = teamColor;
+		pieceRenderer.material.color = Color.Lerp(teamColor, highlightColor, 0.5f);
 	}
 
 	public void Deselect()
@@ -96,7 +110,6 @@ public class CheckersPieceGameObject : MonoBehaviour
 			if (!Selected)
 			{
 				CheckersGame.CurrentPlayer.SelectedPiece = transform.parent;
-				pieceRenderer.material.color = Color.Lerp(teamColor, highlightColor, 0.5f);
 			}
 			else
 			{

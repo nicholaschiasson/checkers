@@ -18,6 +18,8 @@ public class CheckersGame : MonoBehaviour
 {
 	static Queue<Player> players;
 
+	public static GameObject CheckersPieceToDie;
+
 	public static Player CurrentPlayer
 	{
 		get
@@ -42,7 +44,22 @@ public class CheckersGame : MonoBehaviour
 		players.Enqueue(new Player(CheckersTeam.RED, DirectionOfMovement.FORWARD));
 		players.Enqueue(new Player(CheckersTeam.BLUE, DirectionOfMovement.BACKWARD));
 
+		CheckersPieceToDie = null;
+
 		MovingPiece = false;
+
+		// UI
+		string passTurnButtonPrefabPath = Utils.Path.Combine("Prefabs", "PassTurnButton");
+		GameObject passTurnButton = Instantiate(Resources.Load(passTurnButtonPrefabPath)) as GameObject;
+		passTurnButton.transform.position = new Vector3(-4.25f, 0.5f, -1.5f);
+		passTurnButton.transform.rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
+		passTurnButton.transform.localScale *= 1.5f;
+
+		string resetButtonPrefabPath = Utils.Path.Combine("Prefabs", "ResetGameButton");
+		GameObject resetButton = Instantiate(Resources.Load(resetButtonPrefabPath)) as GameObject;
+		resetButton.transform.position = new Vector3(-4.25f, 0.5f, -2.5f);
+		resetButton.transform.rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
+		resetButton.transform.localScale *= 1.5f;
 	}
 
 	public static void MovePieceTo(Vector3 position)
@@ -52,7 +69,7 @@ public class CheckersGame : MonoBehaviour
 		if (newPos != CurrentPlayer.SelectedPiece.transform.position)
 		{
 			MovingPiece = true;
-			if (ChessBoard.MovePieceTo(new Vector2(CurrentPlayer.SelectedPiece.position.x, CurrentPlayer.SelectedPiece.position.z), new Vector2(newPos.x, newPos.z)))
+			if (CheckersPieceToDie = ChessBoard.MovePieceTo(new Vector2(CurrentPlayer.SelectedPiece.position.x, CurrentPlayer.SelectedPiece.position.z), new Vector2(newPos.x, newPos.z)))
 			{
 				CurrentPlayer.SelectedPiece.SendMessage("MoveToAndTake", newPos);
 			}
@@ -66,6 +83,24 @@ public class CheckersGame : MonoBehaviour
 	public static void MoveComplete()
 	{
 		MovingPiece = false;
+		if (CheckersPieceToDie)
+		{
+			CheckersPieceToDie.SendMessage("SetTeam", CheckersTeam.NONE);
+			CheckersGame.CurrentPlayer.SelectedPiece = CheckersGame.CurrentPlayer.SelectedPiece;
+		}
+		else
+		{
+			PassPlayerTurn();
+		}
+	}
+
+	public static void PassPlayerTurn(bool force = false)
+	{
+		if (force)
+		{
+			CheckersGame.CurrentPlayer.SelectedPiece = null;
+			CheckersPieceToDie = null;
+		}
 		players.Enqueue(players.Dequeue());
 	}
 }

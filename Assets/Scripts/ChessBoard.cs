@@ -124,8 +124,9 @@ public class ChessBoard : MonoBehaviour
 		}
 	}
 
-	public bool MovePieceTo(Vector2 source, Vector2 destination)
+	public GameObject MovePieceTo(Vector2 source, Vector2 destination)
 	{
+		GameObject deadPiece = null;
 		Vector2 srcPos = ConvertGamePositionToBoardPosition(source);
 		Vector2 destPos = ConvertGamePositionToBoardPosition(destination);
 		CheckersPieces[(int)destPos.x, (int)destPos.y] = CheckersPieces[(int)srcPos.x, (int)srcPos.y];
@@ -133,9 +134,10 @@ public class ChessBoard : MonoBehaviour
 		Vector2 midPos = new Vector2((int)((destPos.x + srcPos.x) / 2.0f), (int)((destPos.y + srcPos.y) / 2.0f));
 		if (midPos != srcPos && midPos != destPos && CheckersPieces[(int)midPos.x, (int)midPos.y])
 		{
-			return true;
+			deadPiece = CheckersPieces[(int)midPos.x, (int)midPos.y];
+			CheckersPieces[(int)midPos.x, (int)midPos.y] = null;
 		}
-		return false;
+		return deadPiece;
 	}
 
 	public Vector2 ConvertGamePositionToBoardPosition(Vector2 position)

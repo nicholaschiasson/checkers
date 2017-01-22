@@ -16,6 +16,7 @@ public class Player
 			selectedPiece = value;
 			if (value)
 			{
+				selectedPiece.SendMessage("Select");
 				CheckersGame.ChessBoard.SelectPiece(new Vector2(value.position.x, value.position.z));
 			}
 			else
