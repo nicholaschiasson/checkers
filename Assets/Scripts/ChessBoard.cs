@@ -14,6 +14,8 @@ public class ChessBoard : MonoBehaviour
 	float tileWidth;
 	float tileHeight;
 
+	GameObject[,] tileSurfaces;
+
 	public GameObject[,] CheckersPieces { get; private set; }
 
 	public ChessBoardTileState[,] ChessBoardTileStates { get; private set; }
@@ -28,6 +30,7 @@ public class ChessBoard : MonoBehaviour
 		float widthby2 = tileWidth / 2.0f;
 		float heightby2 = tileHeight / 2.0f;
 		float depthby2 = transform.localScale.y / 2.0f;
+		tileSurfaces = new GameObject[6, 6];
 		CheckersPieces = new GameObject[6, 6];
 		ChessBoardTileStates = new ChessBoardTileState[6, 6];
 
@@ -42,7 +45,7 @@ public class ChessBoard : MonoBehaviour
 		{
 			for (int j = -halfDimensionX; j < halfDimensionX; j++)
 			{
-				Instantiate(Resources.Load(chessBoardTilePrefabPath), new Vector3(x + j + widthby2, y + depthby2, z + i + heightby2), Quaternion.Euler(rotx + 90.0f, roty, rotz));
+				tileSurfaces[j + halfDimensionX, i + halfDimensionZ] = Instantiate(Resources.Load(chessBoardTilePrefabPath), new Vector3(x + j + widthby2, y + depthby2, z + i + heightby2), Quaternion.Euler(rotx + 90.0f, roty, rotz)) as GameObject;
 			}
 		}
 		string checkersPiecePrefabPath = Utils.Path.Combine("Prefabs", "CheckersPiece");
@@ -135,6 +138,7 @@ public class ChessBoard : MonoBehaviour
 		if (midPos != srcPos && midPos != destPos && CheckersPieces[(int)midPos.x, (int)midPos.y])
 		{
 			deadPiece = CheckersPieces[(int)midPos.x, (int)midPos.y];
+			CheckersGame.CurrentPlayer.PiecesTaken.Add(CheckersPieces[(int)midPos.x, (int)midPos.y]);
 			CheckersPieces[(int)midPos.x, (int)midPos.y] = null;
 		}
 		return deadPiece;
@@ -143,5 +147,20 @@ public class ChessBoard : MonoBehaviour
 	public Vector2 ConvertGamePositionToBoardPosition(Vector2 position)
 	{
 		return new Vector2(position.x - transform.position.x + (dimensions.x / 2.0f) - (tileWidth / 2.0f), position.y - transform.position.z + (dimensions.y / 2.0f) - (tileHeight / 2.0f));
+	}
+
+	public void Cleanup()
+	{
+		for (int i = 0; i < 6; i++)
+		{
+			for (int j = 0; j < 6; j++)
+			{
+				Destroy(tileSurfaces[j, i]);
+				if (CheckersPieces[j, i])
+				{
+					Destroy(CheckersPieces[j, i]);
+				}
+			}
+		}
 	}
 }

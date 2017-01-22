@@ -36,17 +36,7 @@ public class CheckersGame : MonoBehaviour
 
 	void Start()
 	{
-		string chessBoardPrefabPath = Utils.Path.Combine("Prefabs", "ChessBoard");
-		ChessBoardGameObject = Instantiate(Resources.Load(chessBoardPrefabPath)) as GameObject;
-		ChessBoard = ChessBoardGameObject.GetComponent<ChessBoard>();
-
-		players = new Queue<Player>();
-		players.Enqueue(new Player(CheckersTeam.RED, DirectionOfMovement.FORWARD));
-		players.Enqueue(new Player(CheckersTeam.BLUE, DirectionOfMovement.BACKWARD));
-
-		CheckersPieceToDie = null;
-
-		MovingPiece = false;
+		LoadGame();
 
 		// UI
 		string passTurnButtonPrefabPath = Utils.Path.Combine("Prefabs", "PassTurnButton");
@@ -86,7 +76,7 @@ public class CheckersGame : MonoBehaviour
 		if (CheckersPieceToDie)
 		{
 			CheckersPieceToDie.SendMessage("SetTeam", CheckersTeam.NONE);
-			CheckersGame.CurrentPlayer.SelectedPiece = CheckersGame.CurrentPlayer.SelectedPiece;
+			CurrentPlayer.SelectedPiece = CurrentPlayer.SelectedPiece;
 		}
 		else
 		{
@@ -98,9 +88,50 @@ public class CheckersGame : MonoBehaviour
 	{
 		if (force)
 		{
-			CheckersGame.CurrentPlayer.SelectedPiece = null;
+			CurrentPlayer.SelectedPiece = null;
 			CheckersPieceToDie = null;
 		}
 		players.Enqueue(players.Dequeue());
+	}
+
+	public static void ResetGame()
+	{
+		UnloadGame();
+		LoadGame();
+	}
+
+	static void LoadGame()
+	{
+		string chessBoardPrefabPath = Utils.Path.Combine("Prefabs", "ChessBoard");
+		ChessBoardGameObject = Instantiate(Resources.Load(chessBoardPrefabPath)) as GameObject;
+		ChessBoard = ChessBoardGameObject.GetComponent<ChessBoard>();
+
+		players = new Queue<Player>();
+		players.Enqueue(new Player(CheckersTeam.RED, DirectionOfMovement.FORWARD));
+		players.Enqueue(new Player(CheckersTeam.BLUE, DirectionOfMovement.BACKWARD));
+
+		CheckersPieceToDie = null;
+
+		MovingPiece = false;
+	}
+
+	static void UnloadGame()
+	{
+		ChessBoard.Cleanup();
+		Destroy(ChessBoardGameObject);
+		ChessBoardGameObject = null;
+		ChessBoard = null;
+		foreach (Player p in players)
+		{
+			foreach (GameObject g in p.PiecesTaken)
+			{
+				Destroy(g);
+			}
+			p.PiecesTaken.Clear();
+		}
+		players.Clear();
+		players = null;
+		CheckersPieceToDie = null;
+		MovingPiece = false;
 	}
 }

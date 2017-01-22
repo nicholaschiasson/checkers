@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
+
 public class Player
 {
+	Transform selectedPiece;
+
 	public Transform SelectedPiece
 	{
 		get
@@ -27,13 +31,13 @@ public class Player
 	}
 	public CheckersTeam Team { get; private set; }
 	public DirectionOfMovement PermittedDirectionOfMovement { get; private set; }
-
-	Transform selectedPiece;
+	public List<GameObject> PiecesTaken { get; set; }
 
 	public Player(CheckersTeam team, DirectionOfMovement permittedDirectionOfMovement)
 	{
 		SelectedPiece = null;
 		Team = team;
 		PermittedDirectionOfMovement = permittedDirectionOfMovement;
+		PiecesTaken = new List<GameObject>();
 	}
 }

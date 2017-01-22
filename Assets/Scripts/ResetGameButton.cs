@@ -81,6 +81,6 @@ public class ResetGameButton : MonoBehaviour
 
 	void OnMouseClick()
 	{
-		Debug.Log("Reset");
+		CheckersGame.ResetGame();
 	}
 }
