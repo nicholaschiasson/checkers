@@ -6,6 +6,9 @@ public class CheckersPiece : MonoBehaviour
 	Animator animator;
 	CheckersPieceGameObject checkersPieceGameObject;
 	Vector3 destination;
+	bool dying = false;
+
+	public bool Dead = false;
 
 	public CheckersTeam Team
 	{
@@ -39,9 +42,17 @@ public class CheckersPiece : MonoBehaviour
 			}
 			else
 			{
-				transform.position = destination;
-				CheckersGame.MoveComplete();
+				if (!dying)
+				{
+					transform.position = destination;
+					CheckersGame.MoveComplete();
+				}
 			}
+		}
+
+		if (Dead)
+		{
+			Destroy(gameObject);
 		}
 	}
 
@@ -79,5 +90,13 @@ public class CheckersPiece : MonoBehaviour
 		{
 			CheckersGame.CurrentPlayer.SelectedPiece = null;
 		}
+	}
+
+	public void Die()
+	{
+		animator.Play("CheckersPieceDeathAnimation");
+		dying = true;
+		destination = new Vector3(transform.position.x, transform.position.y - 0.26f, transform.position.z);
+		Team = CheckersTeam.NONE;
 	}
 }

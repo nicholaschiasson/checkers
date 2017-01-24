@@ -46,7 +46,6 @@ public class CheckersPieceGameObject : MonoBehaviour
 				teamColor = Color.red;
 				break;
 			default:
-				teamColor = Color.gray;
 				break;
 		}
 		Team = team;

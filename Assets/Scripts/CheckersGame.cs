@@ -75,7 +75,7 @@ public class CheckersGame : MonoBehaviour
 		MovingPiece = false;
 		if (CheckersPieceToDie)
 		{
-			CheckersPieceToDie.SendMessage("SetTeam", CheckersTeam.NONE);
+			CheckersPieceToDie.SendMessage("Die");
 			CurrentPlayer.SelectedPiece = CurrentPlayer.SelectedPiece;
 		}
 		else
@@ -121,14 +121,6 @@ public class CheckersGame : MonoBehaviour
 		Destroy(ChessBoardGameObject);
 		ChessBoardGameObject = null;
 		ChessBoard = null;
-		foreach (Player p in players)
-		{
-			foreach (GameObject g in p.PiecesTaken)
-			{
-				Destroy(g);
-			}
-			p.PiecesTaken.Clear();
-		}
 		players.Clear();
 		players = null;
 		CheckersPieceToDie = null;

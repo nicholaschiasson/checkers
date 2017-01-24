@@ -138,7 +138,6 @@ public class ChessBoard : MonoBehaviour
 		if (midPos != srcPos && midPos != destPos && CheckersPieces[(int)midPos.x, (int)midPos.y])
 		{
 			deadPiece = CheckersPieces[(int)midPos.x, (int)midPos.y];
-			CheckersGame.CurrentPlayer.PiecesTaken.Add(CheckersPieces[(int)midPos.x, (int)midPos.y]);
 			CheckersPieces[(int)midPos.x, (int)midPos.y] = null;
 		}
 		return deadPiece;
