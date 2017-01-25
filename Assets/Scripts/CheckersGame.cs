@@ -71,6 +71,10 @@ public class CheckersGame : MonoBehaviour
 		{
 			CheckersPieceToDie.SendMessage("Die");
 			CurrentPlayer.SelectedPiece = CurrentPlayer.SelectedPiece;
+			if (!ChessBoard.SelectedPieceCanMove)
+			{
+				PassPlayerTurn(true);
+			}
 		}
 		else
 		{
@@ -84,6 +88,7 @@ public class CheckersGame : MonoBehaviour
 		{
 			CurrentPlayer.SelectedPiece = null;
 			CheckersPieceToDie = null;
+				
 		}
 		players.Enqueue(players.Dequeue());
 	}

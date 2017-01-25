@@ -20,6 +20,21 @@ public class ChessBoard : MonoBehaviour
 
 	public ChessBoardTileState[,] ChessBoardTileStates { get; private set; }
 
+	public bool SelectedPieceCanMove
+	{
+		get
+		{
+			foreach (ChessBoardTileState tileState in ChessBoardTileStates)
+			{
+				if (tileState == ChessBoardTileState.AVAILABLE)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+
 	void Awake()
 	{
 		dimensions = new Vector2(transform.localScale.x, transform.localScale.z);
