@@ -117,7 +117,10 @@ public class ChessBoard : MonoBehaviour
 				}
 				else
 				{
-					availableMoveTiles.Add(new Vector2(leftStepColumn, stepRowIndex));
+					if (!CheckersGame.CheckersPieceToDie)
+					{
+						availableMoveTiles.Add(new Vector2(leftStepColumn, stepRowIndex));
+					}
 				}
 			}
 			if (rightStepColumn < 6)
@@ -132,7 +135,10 @@ public class ChessBoard : MonoBehaviour
 				}
 				else
 				{
-					availableMoveTiles.Add(new Vector2(rightStepColumn, stepRowIndex));
+					if (!CheckersGame.CheckersPieceToDie)
+					{
+						availableMoveTiles.Add(new Vector2(rightStepColumn, stepRowIndex));
+					}
 				}
 			}
 		}
