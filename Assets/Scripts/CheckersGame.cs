@@ -39,12 +39,6 @@ public class CheckersGame : MonoBehaviour
 		LoadGame();
 
 		// UI
-		string passTurnButtonPrefabPath = Utils.Path.Combine("Prefabs", "PassTurnButton");
-		GameObject passTurnButton = Instantiate(Resources.Load(passTurnButtonPrefabPath)) as GameObject;
-		passTurnButton.transform.position = new Vector3(-4.25f, 0.5f, -1.5f);
-		passTurnButton.transform.rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
-		passTurnButton.transform.localScale *= 1.5f;
-
 		string resetButtonPrefabPath = Utils.Path.Combine("Prefabs", "ResetGameButton");
 		GameObject resetButton = Instantiate(Resources.Load(resetButtonPrefabPath)) as GameObject;
 		resetButton.transform.position = new Vector3(-4.25f, 0.5f, -2.5f);
