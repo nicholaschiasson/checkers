@@ -30,6 +30,8 @@ public class CheckersGame : MonoBehaviour
 
 	public static bool MovingPiece { get; private set; }
 
+	public static bool DoubleJump { get; private set; }
+
 	public static GameObject ChessBoardGameObject { get; private set; }
 
 	public static ChessBoard ChessBoard { get; private set; }
@@ -55,6 +57,7 @@ public class CheckersGame : MonoBehaviour
 			MovingPiece = true;
 			if (CheckersPieceToDie = ChessBoard.MovePieceTo(new Vector2(CurrentPlayer.SelectedPiece.position.x, CurrentPlayer.SelectedPiece.position.z), new Vector2(newPos.x, newPos.z)))
 			{
+				DoubleJump = true;
 				CurrentPlayer.SelectedPiece.SendMessage("MoveToAndTake", newPos);
 			}
 			    else
@@ -88,8 +91,8 @@ public class CheckersGame : MonoBehaviour
 		{
 			CurrentPlayer.SelectedPiece = null;
 			CheckersPieceToDie = null;
-				
 		}
+		DoubleJump = false;
 		players.Enqueue(players.Dequeue());
 	}
 
@@ -112,6 +115,7 @@ public class CheckersGame : MonoBehaviour
 		CheckersPieceToDie = null;
 
 		MovingPiece = false;
+		DoubleJump = false;
 	}
 
 	static void UnloadGame()

@@ -94,50 +94,69 @@ public class ChessBoard : MonoBehaviour
 		Vector2 piecePosition = ConvertGamePositionToBoardPosition(position);
 		ChessBoardTileStates[(int)piecePosition.x, (int)piecePosition.y] = ChessBoardTileState.SELECTED_PIECE;
 		List<Vector2> availableMoveTiles = new List<Vector2>();
-		int rowOffset = (int)(CheckersGame.CurrentPlayer.PermittedDirectionOfMovement == DirectionOfMovement.FORWARD ? 1 : -1);
-		int stepRowIndex = (int)piecePosition.y + rowOffset;
-		int takeRowIndex = (int)piecePosition.y + (2 * rowOffset);
-		int leftStepColumn = (int)piecePosition.x - 1;
-		int leftTakeColumn = (int)piecePosition.x - 2;
-		int rightStepColumn = (int)piecePosition.x + 1;
-		int rightTakeColumn = (int)piecePosition.x + 2;
-		bool takeRowIndexInRange = takeRowIndex >= 0 && takeRowIndex < 6;
-		if (stepRowIndex >= 0 && stepRowIndex < 6)
+		List<DirectionOfMovement> dirs = new List<DirectionOfMovement>();
+		dirs.Add(CheckersGame.CurrentPlayer.PermittedDirectionOfMovement);
+		if ((CheckersGame.CurrentPlayer.SelectedPiece.GetComponent<CheckersPiece>() as CheckersPiece).IsCrowned)
 		{
-			CheckersPiece selectedPiece = CheckersGame.CurrentPlayer.SelectedPiece.GetComponent<CheckersPiece>();
-			if (leftStepColumn >= 0)
+			switch (CheckersGame.CurrentPlayer.PermittedDirectionOfMovement)
 			{
-				if (CheckersPieces[leftStepColumn, stepRowIndex])
-				{
-					CheckersPiece piece = CheckersPieces[leftStepColumn, stepRowIndex].GetComponent<CheckersPiece>();
-					if (selectedPiece.Team != piece.Team && leftTakeColumn >= 0 && takeRowIndexInRange && !CheckersPieces[leftTakeColumn, takeRowIndex])
-					{
-						availableMoveTiles.Add(new Vector2(leftTakeColumn, takeRowIndex));
-					}
-				}
-				else
-				{
-					if (!CheckersGame.CheckersPieceToDie)
-					{
-						availableMoveTiles.Add(new Vector2(leftStepColumn, stepRowIndex));
-					}
-				}
+				case DirectionOfMovement.FORWARD:
+					dirs.Add(DirectionOfMovement.BACKWARD);
+					break;
+				case DirectionOfMovement.BACKWARD:
+					dirs.Add(DirectionOfMovement.FORWARD);
+					break;
+				default:
+					break;
 			}
-			if (rightStepColumn < 6)
+		}
+		foreach (DirectionOfMovement dir in dirs)
+		{
+			int rowOffset = (int)(dir == DirectionOfMovement.FORWARD ? 1 : -1);
+			int stepRowIndex = (int)piecePosition.y + rowOffset;
+			int takeRowIndex = (int)piecePosition.y + (2 * rowOffset);
+			int leftStepColumn = (int)piecePosition.x - 1;
+			int leftTakeColumn = (int)piecePosition.x - 2;
+			int rightStepColumn = (int)piecePosition.x + 1;
+			int rightTakeColumn = (int)piecePosition.x + 2;
+			bool takeRowIndexInRange = takeRowIndex >= 0 && takeRowIndex < 6;
+			if (stepRowIndex >= 0 && stepRowIndex < 6)
 			{
-				if (CheckersPieces[rightStepColumn, stepRowIndex])
+				CheckersPiece selectedPiece = CheckersGame.CurrentPlayer.SelectedPiece.GetComponent<CheckersPiece>();
+				if (leftStepColumn >= 0)
 				{
-					CheckersPiece piece = CheckersPieces[rightStepColumn, stepRowIndex].GetComponent<CheckersPiece>();
-					if (selectedPiece.Team != piece.Team && rightTakeColumn < 6 && takeRowIndexInRange && !CheckersPieces[rightTakeColumn, takeRowIndex])
+					if (CheckersPieces[leftStepColumn, stepRowIndex])
 					{
-						availableMoveTiles.Add(new Vector2(rightTakeColumn, takeRowIndex));
+						CheckersPiece piece = CheckersPieces[leftStepColumn, stepRowIndex].GetComponent<CheckersPiece>();
+						if (selectedPiece.Team != piece.Team && leftTakeColumn >= 0 && takeRowIndexInRange && !CheckersPieces[leftTakeColumn, takeRowIndex])
+						{
+							availableMoveTiles.Add(new Vector2(leftTakeColumn, takeRowIndex));
+						}
+					}
+					else
+					{
+						if (!CheckersGame.CheckersPieceToDie)
+						{
+							availableMoveTiles.Add(new Vector2(leftStepColumn, stepRowIndex));
+						}
 					}
 				}
-				else
+				if (rightStepColumn < 6)
 				{
-					if (!CheckersGame.CheckersPieceToDie)
+					if (CheckersPieces[rightStepColumn, stepRowIndex])
 					{
-						availableMoveTiles.Add(new Vector2(rightStepColumn, stepRowIndex));
+						CheckersPiece piece = CheckersPieces[rightStepColumn, stepRowIndex].GetComponent<CheckersPiece>();
+						if (selectedPiece.Team != piece.Team && rightTakeColumn < 6 && takeRowIndexInRange && !CheckersPieces[rightTakeColumn, takeRowIndex])
+						{
+							availableMoveTiles.Add(new Vector2(rightTakeColumn, takeRowIndex));
+						}
+					}
+					else
+					{
+						if (!CheckersGame.CheckersPieceToDie)
+						{
+							availableMoveTiles.Add(new Vector2(rightStepColumn, stepRowIndex));
+						}
 					}
 				}
 			}

@@ -14,7 +14,7 @@ public class CheckersPieceGameObject : MonoBehaviour
 	{
 		get
 		{
-			return !CheckersGame.CheckersPieceToDie && !CheckersGame.MovingPiece && CheckersGame.CurrentPlayer.Team == Team;
+			return !CheckersGame.DoubleJump && !CheckersGame.MovingPiece && CheckersGame.CurrentPlayer.Team == Team;
 		}
 	}
 
@@ -54,7 +54,6 @@ public class CheckersPieceGameObject : MonoBehaviour
 
 	public void Select()
 	{
-		pieceRenderer.material.color = teamColor;
 		pieceRenderer.material.color = Color.Lerp(teamColor, highlightColor, 0.5f);
 	}
 
@@ -65,6 +64,7 @@ public class CheckersPieceGameObject : MonoBehaviour
 
 	public void OnMouseEnter()
 	{
+		Debug.Log("Selectable: " + Selectable + ", Selected: " + Selected);
 		if (Selectable && !Selected)
 		{
 			pieceRenderer.material.color = Color.Lerp(teamColor, highlightColor, 0.5f);
@@ -83,7 +83,7 @@ public class CheckersPieceGameObject : MonoBehaviour
 	{
 		if (!Selected)
 		{
-			pieceRenderer.material.color = teamColor;
+			Deselect();
 		}
 		mouseDown = false;
 	}
