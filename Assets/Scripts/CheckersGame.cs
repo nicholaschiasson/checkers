@@ -18,6 +18,8 @@ public class CheckersGame : MonoBehaviour
 {
 	static Queue<Player> players;
 
+	static GameObject gameProgressPane;
+
 	public static GameObject CheckersPieceToDie;
 
 	public static Player CurrentPlayer
@@ -38,14 +40,21 @@ public class CheckersGame : MonoBehaviour
 
 	void Start()
 	{
-		LoadGame();
-
 		// UI
+		string gameProgressPanePrefabPath = Utils.Path.Combine("Prefabs", "GameProgressPane");
+		gameProgressPane = Instantiate(Resources.Load(gameProgressPanePrefabPath)) as GameObject;
+		gameProgressPane.transform.position = new Vector3(-4.25f, 0.5f, 1.5f);
+		gameProgressPane.transform.rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
+		gameProgressPane.transform.localScale *= 1.5f;
+
 		string resetButtonPrefabPath = Utils.Path.Combine("Prefabs", "ResetGameButton");
 		GameObject resetButton = Instantiate(Resources.Load(resetButtonPrefabPath)) as GameObject;
 		resetButton.transform.position = new Vector3(-4.25f, 0.5f, -2.5f);
 		resetButton.transform.rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
 		resetButton.transform.localScale *= 1.5f;
+
+		// Game board and objects
+		LoadGame();
 	}
 
 	public static void MovePieceTo(Vector3 position)
@@ -94,6 +103,7 @@ public class CheckersGame : MonoBehaviour
 		}
 		DoubleJump = false;
 		players.Enqueue(players.Dequeue());
+		gameProgressPane.SendMessage("SetCurrentPlayer", CurrentPlayer.Team);
 	}
 
 	public static void ResetGame()
@@ -111,6 +121,7 @@ public class CheckersGame : MonoBehaviour
 		players = new Queue<Player>();
 		players.Enqueue(new Player(CheckersTeam.RED, DirectionOfMovement.FORWARD));
 		players.Enqueue(new Player(CheckersTeam.BLUE, DirectionOfMovement.BACKWARD));
+		gameProgressPane.SendMessage("SetCurrentPlayer", CurrentPlayer.Team);
 
 		CheckersPieceToDie = null;
 
