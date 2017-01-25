@@ -64,7 +64,6 @@ public class CheckersPieceGameObject : MonoBehaviour
 
 	public void OnMouseEnter()
 	{
-		Debug.Log("Selectable: " + Selectable + ", Selected: " + Selected);
 		if (Selectable && !Selected)
 		{
 			pieceRenderer.material.color = Color.Lerp(teamColor, highlightColor, 0.5f);
