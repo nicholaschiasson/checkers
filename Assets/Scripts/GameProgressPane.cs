@@ -25,4 +25,21 @@ public class GameProgressPane : MonoBehaviour
 				break;
 		}
 	}
+
+	public void SetWinner(CheckersTeam currentTeam)
+	{
+		switch (currentTeam)
+		{
+			case CheckersTeam.BLUE:
+				textMesh.color = Color.blue;
+				textMesh.text = "Blue wins!";
+				break;
+			case CheckersTeam.RED:
+				textMesh.color = Color.red;
+				textMesh.text = "Red wins!";
+				break;
+			default:
+				break;
+		}
+	}
 }

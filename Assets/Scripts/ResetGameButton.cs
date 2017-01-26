@@ -83,4 +83,9 @@ public class ResetGameButton : MonoBehaviour
 	{
 		CheckersGame.ResetGame();
 	}
+
+	void SetButtonUpColor(Color color)
+	{
+		ButtonUpColor = color;
+	}
 }

@@ -14,11 +14,30 @@ public enum DirectionOfMovement
 	BACKWARD
 }
 
+public static class CheckersTeamExtension
+{
+	public static CheckersTeam Opponent(this CheckersTeam team)
+	{
+		switch (team)
+		{
+			case CheckersTeam.BLUE:
+				return CheckersTeam.RED;
+			case CheckersTeam.RED:
+				return CheckersTeam.BLUE;
+			default:
+				break;
+		}
+		return CheckersTeam.NONE;
+	}
+}
+
 public class CheckersGame : MonoBehaviour
 {
 	static Queue<Player> players;
 
 	static GameObject gameProgressPane;
+
+	static GameObject resetButton;
 
 	public static GameObject CheckersPieceToDie;
 
@@ -48,7 +67,7 @@ public class CheckersGame : MonoBehaviour
 		gameProgressPane.transform.localScale *= 1.5f;
 
 		string resetButtonPrefabPath = Utils.Path.Combine("Prefabs", "ResetGameButton");
-		GameObject resetButton = Instantiate(Resources.Load(resetButtonPrefabPath)) as GameObject;
+		resetButton = Instantiate(Resources.Load(resetButtonPrefabPath)) as GameObject;
 		resetButton.transform.position = new Vector3(-4.25f, 0.5f, -2.5f);
 		resetButton.transform.rotation = Quaternion.Euler(90.0f, 0.0f, 0.0f);
 		resetButton.transform.localScale *= 1.5f;
@@ -103,7 +122,15 @@ public class CheckersGame : MonoBehaviour
 		}
 		DoubleJump = false;
 		players.Enqueue(players.Dequeue());
-		gameProgressPane.SendMessage("SetCurrentPlayer", CurrentPlayer.Team);
+		if (ChessBoard.GetCheckersPiecesOfTeam(CurrentPlayer.Team).Count > 0)
+		{
+			gameProgressPane.SendMessage("SetCurrentPlayer", CurrentPlayer.Team);
+		}
+		else
+		{
+			resetButton.SendMessage("SetButtonUpColor", Color.Lerp(Color.green, Color.white, 0.5f));
+			gameProgressPane.SendMessage("SetWinner", CurrentPlayer.Team.Opponent());
+		}
 	}
 
 	public static void ResetGame()
@@ -127,6 +154,8 @@ public class CheckersGame : MonoBehaviour
 
 		MovingPiece = false;
 		DoubleJump = false;
+
+		resetButton.SendMessage("SetButtonUpColor", Color.white);
 	}
 
 	static void UnloadGame()

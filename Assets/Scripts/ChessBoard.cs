@@ -188,6 +188,19 @@ public class ChessBoard : MonoBehaviour
 		return new Vector2(position.x - transform.position.x + (dimensions.x / 2.0f) - (tileWidth / 2.0f), position.y - transform.position.z + (dimensions.y / 2.0f) - (tileHeight / 2.0f));
 	}
 
+	public List<GameObject> GetCheckersPiecesOfTeam(CheckersTeam team)
+	{
+		List<GameObject> checkersPiecesOfTeam = new List<GameObject>();
+		foreach (GameObject piece in CheckersPieces)
+		{
+			if (piece && piece.GetComponent<CheckersPiece>().Team == team)
+			{
+				checkersPiecesOfTeam.Add(piece);
+			}
+		}
+		return checkersPiecesOfTeam;
+	}
+
 	public void Cleanup()
 	{
 		for (int i = 0; i < 6; i++)
