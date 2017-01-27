@@ -9,7 +9,7 @@
     <script src="TemplateData/UnityProgress.js"></script>
   </head>
   <body class="template">
-    <div class="template-wrap clear" style="top:55%;">
+    <div class="template-wrap clear">
       <h1>checkers</h1>
       <p>COMP4501 Assignment 1 - A simple local multiplayer game of checkers made with Unity.</p>
       <canvas class="emscripten" id="canvas" oncontextmenu="event.preventDefault()" height="540px" width="960px"></canvas>
@@ -25,20 +25,19 @@
       <p>When a piece reaches the end of the board, it becomes crowned and gains the ability to move diagonally backwards along the board.</p>
       <p>The game ends when all of the pieces of one player are removed from the board, at which point the reset button must be used in order to play again.</p>
     </div>
-    <script type='text/javascript'>
-  var Module = {
-    TOTAL_MEMORY: 268435456,
-    errorhandler: null,			// arguments: err, url, line. This function must return 'true' if the error is handled, otherwise 'false'
-    compatibilitycheck: null,
-    backgroundColor: "#222C36",
-    splashStyle: "Light",
-    dataUrl: "Release/checkers.data",
-    codeUrl: "Release/checkers.js",
-    asmUrl: "Release/checkers.asm.js",
-    memUrl: "Release/checkers.mem",
-  };
-</script>
-<script src="Release/UnityLoader.js"></script>
-
+    <script type="text/javascript">
+      var Module = {
+        TOTAL_MEMORY: 268435456,
+        errorhandler: null,			// arguments: err, url, line. This function must return 'true' if the error is handled, otherwise 'false'
+        compatibilitycheck: null,
+        backgroundColor: "#222C36",
+        splashStyle: "Light",
+        dataUrl: "Release/checkers.data",
+        codeUrl: "Release/checkers.js",
+        asmUrl: "Release/checkers.asm.js",
+        memUrl: "Release/checkers.mem",
+      };
+    </script>
+    <script src="Release/UnityLoader.js"></script>
   </body>
 </html>
